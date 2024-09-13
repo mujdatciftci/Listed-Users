@@ -2,6 +2,10 @@ body {
        background-color: #f5f5f5 !important;
 }
 
+hr {
+       margin: 10px 0 !important;
+}
+
 .card {
        background-color: #fff;
        border-radius: 20px !important;
@@ -13,8 +17,7 @@ body {
        background-color: unset !important;
 }
 
-.email, .id-wrapper {
-       font-size: 14px;
+.txt-light {
        color: #6c7273;
 }
 
@@ -23,7 +26,6 @@ body {
               font-size: 14px !important;
        }
 }
-
 
 
 @media (max-width: 400px) {
