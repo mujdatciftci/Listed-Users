@@ -21,7 +21,7 @@ hr {
        color: #6c7273;
 }
 
-@media (min-width: 576px) and (max-width: 1200px) {
+@media  (max-width: 1200px) {
        .card-title, .card-body span {
               font-size: 14px !important;
        }
@@ -38,4 +38,13 @@ hr {
        .card {
               width: 250px !important;
        }
+}
+
+
+#post img {
+       min-width: 50px !important;
+}
+
+#post .card {
+       max-width: 450px !important;
 }
