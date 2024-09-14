@@ -1,4 +1,4 @@
-async function getUsers() {
+(async function getUsers() {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
     if (!response.ok) {
@@ -9,7 +9,7 @@ async function getUsers() {
   } catch (error) {
     alert(error.message);
   }
-}
+})();
 
 function renderUsers(data) {
   let html = "";
@@ -88,6 +88,4 @@ function renderUsers(data) {
   document.querySelector("#user-cards").innerHTML = html;
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-  await getUsers();
-});
+
