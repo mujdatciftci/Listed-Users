@@ -1,34 +1,40 @@
 (async function getUsers() {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
-    
+
     if (!response.ok) {
-      throw new Error("Failed");
+      throw new Error("Users not found");
     }
     const data = await response.json();
+
     renderUsers(data);
   } catch (error) {
-    alert(error.message);
+    renderErrorMessage(error.message);
   }
 })();
 
 function renderUsers(data) {
   let html = "";
-  data.forEach((user) => {
+  data.forEach((user, index) => {
     let name = user.name.split(" ");
     let surname = name[name.length - 1];
-    let index = Math.floor(Math.random() * 100);
-    let gender = Math.random() < 0.5 ? "men" : "women";
-    let imageUrl = `https://randomuser.me/api/portraits/${gender}/${index}.jpg`; 
+    let gender = () => {
+      if (Math.random() < 0.5) {
+        return "men";
+      } else {
+        return "women";
+      }
+    };
+    let imageUrl = `https://randomuser.me/api/portraits/${gender()}/${index}.jpg`;
 
     const params = new URLSearchParams();
     params.append("userId", user.id);
     const url = `posts.html?${params.toString()}`;
-    
+
     html += `
               <div class="col-8 col-sm-12 col-lg-10 col-xl-8 mx-auto">
                      <div class="row gap-1 card-wrapper justify-content-center">
-                            <div class="col-sm-5 col-md-4">
+                            <div class="col-sm-5 col-md-4 card-left hidden-left">
                                    <div class="card h-100 mx-auto">
                                           <div class="card-body">
                                                  <img
@@ -37,7 +43,7 @@ function renderUsers(data) {
                                                  alt="Profile Picture"
                                                  />
                                                  <h5 id="name" class="text-center">${
-                                                   user.name
+                                                   name[0]
                                                  }</h5>
                                                  <h5 id="surname" class=" text-center mb-4">${surname}</h5>
                                                  <span class="text-center">ID:</span>
@@ -52,7 +58,7 @@ function renderUsers(data) {
                                           </div>
                                    </div>
                             </div>
-                            <div class="col-sm-6 col-md-7">
+                            <div class="col-sm-6 col-md-7 card-right hidden-right">
                                    <div class="card h-100 mx-auto">
                                    <div class="card-header py-3">
                                           <h5 class="card-title m-0">Company Details</h5>
@@ -109,19 +115,55 @@ function renderUsers(data) {
               `;
   });
   document.querySelector("#user-cards").innerHTML = html;
-  
+  visibleElements();
 }
 
-// (async function getImgUrl(){
-//        const response2 = await fetch("https://jsonplaceholder.typicode.com/albums/1/photos");
-//        const img = await response2.json();
-//        renderImage(img);
-// })();
+function renderErrorMessage(error) {
+  document.getElementById("errorMessageUser").innerHTML = ` 
+                 <div class="alert alert-danger mx-auto animate__animated animate__fadeInUp mt-3">
+                 ${error}
+                 </div>
+       `;
+  setTimeout(function () {
+    document.querySelector(".alert").classList.add("animate__animated animate__fadeOutUp");
+  }, 2000);
+  setTimeout(function () {
+    document.getElementById("errorMessageUser").innerHTML = "";
+  }, 2200);
+}
+
+function visibleElements() {
+  const sectionsLeft = document.querySelectorAll(".card-left");
+  const sectionsRight = document.querySelectorAll(".card-right");
 
 
-// function renderImage(img){
-// img.forEach((img) => {
-//        let urlImg = img.url;
-// } )
-// }
+  const observerLeft = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observerLeft.unobserve(entry.target); 
+          }
+      });
+  }, {
+      threshold: 0.5 
+  });
 
+  sectionsLeft.forEach(section => {
+      observerLeft.observe(section); 
+  });
+
+  const observerRight = new IntersectionObserver(entries => {
+       entries.forEach(entry => {
+           if (entry.isIntersecting) {
+               entry.target.classList.add('visible');
+               observerRight.unobserve(entry.target); 
+           }
+       });
+   }, {
+       threshold: 0.5 
+   });
+ 
+   sectionsRight.forEach(section => {
+       observerRight.observe(section); 
+   });
+}
