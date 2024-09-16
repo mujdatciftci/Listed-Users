@@ -4,7 +4,7 @@ const userId = urlParams.get("userId");
 
 (async function getPosts() {
   try {
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts' + userId);
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts?' + userId);
     if (!response.ok) {
       throw new Error("User's Posts not found.");
     }else {
